@@ -1,0 +1,47 @@
+body {
+    overflow-x: hidden; /*remove horizontal overhead*/  
+  }
+h2{
+    text-align:center;
+}
+#check_user{
+    padding: 5px;
+    display:block;
+    border:1px solid red;
+}
+tfoot input {
+    width: 100%;
+    padding: 3px;
+    box-sizing: border-box;
+}
+
+tfoot {
+    display: table-header-group;
+}
+
+select:required:invalid {
+    color: #666;
+}
+option[value=""][disabled] {
+    display: none;
+}
+option {
+    color: #000;
+}   
+
+/* Style tab links */
+.tab {
+    color: white;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    font-size: 17px;
+    width: 25%;
+  }
+  
+  
+  select.form-control:not([size]):not([multiple]) {
+    height: auto!important;
+  }

@@ -1,0 +1,155 @@
+{% extends 'base.html' %} 
+{% load static %}
+
+
+{% block content %}
+
+{% if user.is_authenticated %}
+    {% csrf_token %}
+    <input type="hidden" id="myVar" name="variable" value="{{ state }}">
+
+    <div class="row">
+        <h3 class="col-md-offset-4 col-md-4 ">Welcome <u>{{user.email}}</u></h3>
+        <h4 class="col-md-offset-2"> <a href='../logout'>Logout</a></h4>
+    </div>
+    <div class="row">
+        <div class="col-md-offset-2 col-md-6">
+            {% for message in messages %}
+            <div class="alert alert-success" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>{{message}}</strong> 
+              </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row">
+        <div id="exTab1" class="container">
+            <ul  class="nav nav-pills row">
+                <li class="tab active col-md-offset-2 col-md-4">
+                    <a  href="#1a" data-toggle="tab">Create Code</a>
+                </li>
+                <li class="tab col-md-4">
+                    <a href="#2a" data-toggle="tab">Search Code</a>
+                </li>
+            </ul>
+            <br>
+            <div class="tab-content clearfix">
+                <div class="tab-pane active" id="1a">
+                    <button type="button" class="btn btn-default btn-sm" id="create-btn">
+                        <span class="glyphicon glyphicon-plus"></span> Create
+                    </button>
+                    <br><br>
+                    <div class="row" id='1a-content'>   
+                        <div class="col-md-6">              
+                            <form id="codeform" class="from-horizontal" action="add" method="POST">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <select class="form-control" id="state" name="state" required>
+                                        <option value="" disabled selected>State*</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <select class="form-control" id="atype" name="atype"  required>
+                                        <option value="" disabled selected>A type C/S*</option>
+                                        <option value="A">C</option>
+                                        <option value="S">S</option>
+                                    </select>
+                                </div>    
+
+                                <div class="form-group">
+                                    <input type="text" id="rnumber" class="form-control " name="rnumber" placeholder="Reference Number*" maxlength="20" required/>
+                                 </div>
+
+                                <div class="form-group">
+                                    <select class="form-control" id="dtype" name="dtype"  required>
+                                        <option value="" disabled selected>D type G/P/U*</option>
+                                        <option value="G">G</option>
+                                        <option value="P">P</option>
+                                        <option value="U">U</option>
+                                    </select>
+                                </div>
+                                
+                            </form>
+                            <button type="button" class="btn btn-primary" id="create">Create Code</button>
+                            <button type="button" class="btn btn-danger" id="cancel">Cancel</button>
+                        </div>
+                        <div class="col-md-6">
+                            <center>
+                                <h2>
+                                    Auto incremental Value displayed here (of 3 digit)
+                                </h2>
+                                <h1>{{code}}</h1>
+                            
+                            </center>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="2a">
+                    <br><br>
+                    <div class="col-md-offset-2 col-md-6">
+                        <div class="input-group input-daterange">
+                            <input type="text" id="min" class="form-control date-range-filter" data-date-format="yyyy-mm-dd" placeholder="From:">
+                            <div class="input-group-addon">to</div>
+                            <input type="text" id="max" class="form-control date-range-filter" data-date-format="yyyy-mm-dd" placeholder="To:">
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <button type="button" class="btn btn-primary" id="search">Search</button>
+                    </div>
+                    <br><br>
+                    <table id="example" class="display" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>State</th>
+                                <th>A Type</th>
+                                <th>D Type</th>
+                                <th>Code</th>
+                                <th>Ref. No.</th>
+                                <th>Created Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for code in code_list %}
+                            <tr>
+                                <td>{{code.state}}</td>
+                                <td>{{code.type_of}}</td>
+                                <td>{{code.d_type}}</td>
+                                <td>{{code.code}}</td>
+                                <td>{{code.reference_number}}</td>
+                                <td>{{code.created_date|date:'Y/m/d'}}</td> 
+                                <td>
+                                    <a href="/code/edit/{{code.id}}">Edit</a>
+                                    <a href="/code/delete/{{code.id}}">Delete</a>
+                                </td> 
+                            </tr>
+                            {% endfor %}
+                            
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>State</th>
+                                <th>A Type</th>
+                                <th>D Type</th>
+                                <th>Code</th>
+                                <th>Ref. No.</th>
+                                <th hidden>Created Date</th>
+                                <th hidden>Action</th>
+                            </tr>
+                        </tfoot>
+                    </table>               
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+    <script src="{% static 'js/code.js' %}"></script>
+{% else %}
+<script>
+    window.location.href = "../";
+</script>
+
+{% endif %}
+
+{% endblock %}

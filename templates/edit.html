@@ -1,0 +1,42 @@
+{% extends 'base.html' %} 
+{% load widget_tweaks %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+    {% csrf_token %}
+    <input type="hidden" id="myVar" name="variable" value="{{ state }}">
+
+    <div class="row">
+        <div class="col-md-8"></div>
+            <h5>Welcome <u>{{user.email}}</u></h5>
+            <a href='../logout'>logout</a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    {% for hidden_field in form.hidden_fields %}
+                        {{ hidden_field }}
+                    {% endfor %}
+                    
+                    {% for field in form.visible_fields %}
+                        <div class="form-group">
+                            {{ field.label_tag }}
+                            {% render_field field class="form-control" %}
+                            {% if field.help_text %}
+                                <small class="form-text text-muted">{{ field.help_text }}</small>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary">submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endif %}
+
+{% endblock %}
